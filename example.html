@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="virtualButtonManager.js"> </script>
+    <title>虚拟触控按钮</title>
+    <link rel="stylesheet" href="virtualButtonManager.css">
+    <style>
+        body {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+            user-select: none; /* 禁止文本选择 */
+        }
+        .editor {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+
+<div class="editor">
+    <button id="editBtn">编辑</button>
+    <button id="runBtn">运行</button>
+    <button id="exportBtn">导出</button>
+    <button id="generateBtn">一键生成</button>
+    <button id="importBtn">导入</button>
+</div>
+
+<div id="faker"> </div>
+
+<div class="message" id="message">提示信息</div>
+
+<script>
+    // Initialize the ButtonManager module
+    virtualButtonManager.init("faker");
+    document.getElementById('editBtn').addEventListener('click', virtualButtonManager.toggleEditMode);
+    document.getElementById('runBtn').addEventListener('click', virtualButtonManager.toggleRunMode);
+    document.getElementById('generateBtn').addEventListener('click', virtualButtonManager.generateButtons);
+    document.getElementById('exportBtn').addEventListener('click', virtualButtonManager.exportButtons);
+    document.getElementById('importBtn').addEventListener('click', virtualButtonManager.importButtons);
+</script>
+
+</body>
+</html>
