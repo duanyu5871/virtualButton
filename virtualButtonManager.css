@@ -1,0 +1,144 @@
+.virtualButton {
+    position: absolute;
+    width: 50px; /* 设置按钮的宽度 */
+    height: 50px; /* 设置按钮的高度 */
+    background-color: rgba(255, 255, 255, 0.8); /* 白色，透明度80% */
+    border-radius: 50%; /* 圆形 */
+    border: 2px solid rgba(0, 0, 0, 0.5); /* 黑色边框，透明度50% */
+    display: flex; /* 使用flexbox居中内容 */
+    justify-content: center; /* 水平居中 */
+    align-items: center; /* 垂直居中 */
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* 添加阴影效果 */
+    touch-action: manipulation; /* 禁用默认的触摸行为 */
+    -webkit-tap-highlight-color: transparent; /* 禁用高亮效果 */
+    user-select: none; /* 禁用文本选择 */
+    transition: background-color 0.2s ease; /* 添加过渡效果 */
+}
+
+.virtualButton:active {
+    background-color: rgba(200, 200, 200, 0.8); /* 按下时稍微加深颜色 */
+}
+.message {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(255, 255, 0, 0.8); /* 黄色背景 */
+    color: black;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    display: none; /* 默认隐藏 */
+}
+
+.dpad_main {
+    position: absolute;
+    z-index: 999;
+}
+
+.dpad_cross {
+    touch-action: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: .7
+}
+
+.dpad_horizontal {
+    width: 100%;
+    height: 36px;
+    transform: translate(0,-50%);
+    position: absolute;
+    left: 0;
+    top: 50%;
+    border-radius: 5px;
+    overflow: hidden
+}
+
+.dpad_horizontal:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    z-index: 1;
+    transform: translate(0,-50%);
+    width: 0;
+    height: 0;
+    border: 8px solid;
+    border-color: transparent #333 transparent transparent
+}
+
+.dpad_horizontal:after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 50%;
+    z-index: 1;
+    transform: translate(0,-50%);
+    width: 0;
+    height: 0;
+    border: 8px solid;
+    border-color: transparent transparent transparent #333
+}
+
+.dpad_vertical {
+    width: 36px;
+    height: 100%;
+    transform: translate(-50%,0);
+    position: absolute;
+    left: 50%;
+    border-radius: 5px;
+    overflow: hidden
+}
+
+.dpad_vertical:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    z-index: 1;
+    transform: translate(-50%,0);
+    width: 0;
+    height: 0;
+    border: 8px solid;
+    border-color: transparent transparent #333 transparent
+}
+
+.dpad_vertical:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    z-index: 1;
+    transform: translate(-50%,0);
+    width: 0;
+    height: 0;
+    border: 8px solid;
+    border-color: #333 transparent transparent transparent
+}
+
+.dpad_bar {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #787878
+}
+
+.dpad_left_pressed .dpad_horizontal:before {
+    border-right-color: #fff
+}
+
+.dpad_right_pressed .dpad_horizontal:after {
+    border-left-color: #fff
+}
+
+.dpad_up_pressed .dpad_vertical:before {
+    border-bottom-color: #fff
+}
+
+.dpad_down_pressed .dpad_vertical:after {
+    border-top-color: #fff
+}
