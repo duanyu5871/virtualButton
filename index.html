@@ -24,16 +24,16 @@
 <body>
 
 <div class="editor">
-    <button id="editBtn">编辑</button>
-    <button id="runBtn">运行</button>
-    <button id="exportBtn">导出</button>
-    <button id="generateBtn">一键生成</button>
-    <button id="importBtn">导入</button>
+    <button id="editBtn">编辑(edit mode)</button>
+    <button id="runBtn">运行(run mode)</button>
+    <button id="generateBtn">一键生成(generate)</button>
+    <button id="loadBtn" onclick="virtualButtonManager.loadButtons(settings)">加载设置(load settings)</button>
+    <button id="exportBtn">导出(export)</button>
+    <button id="importBtn">导入(import)</button>
+    <button id="clearBtn">导入(clear all)</button>
 </div>
 
 <div id="faker"> </div>
-
-<div class="message" id="message">提示信息</div>
 
 <script>
     // Initialize the ButtonManager module
@@ -43,6 +43,13 @@
     document.getElementById('generateBtn').addEventListener('click', virtualButtonManager.generateButtons);
     document.getElementById('exportBtn').addEventListener('click', virtualButtonManager.exportButtons);
     document.getElementById('importBtn').addEventListener('click', virtualButtonManager.importButtons);
+    document.getElementById('clearBtn').addEventListener('click', virtualButtonManager.clearButtons);
+
+    settings = [
+        {"key":"KeyD","left":"185px","top":"179px","size":"50px"},
+        {"key":"KeyA","left":"188px","top":"72px","size":"50px"},
+        {"key":"dpad","left":"200px","top":"200px","size":"120px"}
+    ]
 </script>
 
 </body>
