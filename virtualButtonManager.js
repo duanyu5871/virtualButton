@@ -1,10 +1,10 @@
 const virtualButtonManager = (() => {
     let editMode = false; // 用于存储是否在编辑模式
     let isMoving = false; // 用于跟踪dpad摇杆是否正在移动
-    let buttons = [];
+    let activeTouchId = null; // 用于跟踪活动的触摸点
+    let buttons = []; // 存放所有的按键
     let keyToCreate = null; // 用于存储按下的键
     let pendingClick = null; // 用于存储待处理的点击位置
-    
     
     // 提示信息的框
     let messageDiv = document.createElement('div');
@@ -33,6 +33,7 @@ const virtualButtonManager = (() => {
     
     // 拟储存所有按钮的父框
     let parentDiv = null;
+    let dpadDiv = null;
     
     const init = (parentID = false) => {
         // 选择父框
@@ -194,6 +195,107 @@ const virtualButtonManager = (() => {
             }
         }
     };
+    
+    // 计算与中心的角度
+    const calculateAngle = (dpad, clientX, clientY) => {
+        const rect = dpadDiv.getBoundingClientRect(); // 获取div的位置和大小
+        
+        // 计算div的中心点
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        // 计算触摸点与中心点的差值
+        const deltaX = clientX - centerX;
+        const deltaY = clientY - centerY;
+
+        // 计算角度（以弧度为单位）
+        const angle = Math.atan2(deltaY, deltaX); // 返回值在 -π 到 π 之间
+
+        //const angleInDegrees = angle * (180 / Math.PI); // 转换为度
+
+        console.log(`Current angle in radians: ${angle}`);
+        //console.log(`Current angle in degrees: ${angleInDegrees}`);
+        dpadDirection(angle)
+    };
+    
+    const dpadDirection = (angle = "null") => {
+        if (angle >= -Math.PI/3 && angle < -Math.PI/6 ) {
+          	//右上
+          	sendVirtualKey("keydown", "ArrowUp");
+          	sendVirtualKey("keyup", "ArrowDown");
+          	sendVirtualKey("keyup", "ArrowLeft");
+          	sendVirtualKey("keydown", "ArrowRight")
+        } else if (angle >= -Math.PI/3*2 && angle < -Math.PI/3 ) {
+          	//上
+          	sendVirtualKey("keydown", "ArrowUp");
+          	sendVirtualKey("keyup", "ArrowDown");
+          	sendVirtualKey("keyup", "ArrowLeft");
+          	sendVirtualKey("keyup", "ArrowRight")
+        } else if (angle >= -Math.PI/6*5 && angle < -Math.PI/3*2 ) {
+          	//左上
+          	sendVirtualKey("keydown", "ArrowUp");
+          	sendVirtualKey("keyup", "ArrowDown");
+          	sendVirtualKey("keydown", "ArrowLeft");
+          	sendVirtualKey("keyup", "ArrowRight")
+        } else if (angle >= Math.PI/6*5 || angle < -Math.PI/6*5 ) {
+          	//左
+          	sendVirtualKey("keyup", "ArrowUp");
+          	sendVirtualKey("keyup", "ArrowDown");
+          	sendVirtualKey("keydown", "ArrowLeft");
+          	sendVirtualKey("keyup", "ArrowRight")
+        } else if (angle >= Math.PI/6*4 && angle < Math.PI/6*5 ) {
+          	//左下
+          	sendVirtualKey("keyup", "ArrowUp");
+          	sendVirtualKey("keydown", "ArrowDown");
+          	sendVirtualKey("keydown", "ArrowLeft");
+          	sendVirtualKey("keyup", "ArrowRight")
+        } else if (angle >= Math.PI/6*2 && angle < Math.PI/6*4 ) {
+          	//下
+          	sendVirtualKey("keyup", "ArrowUp");
+          	sendVirtualKey("keydown", "ArrowDown");
+          	sendVirtualKey("keyup", "ArrowLeft");
+          	sendVirtualKey("keyup", "ArrowRight")
+        } else if (angle >= Math.PI/6 && angle < Math.PI/6*2 ) {
+          	//右下
+          	sendVirtualKey("keyup", "ArrowUp");
+          	sendVirtualKey("keydown", "ArrowDown");
+          	sendVirtualKey("keyup", "ArrowLeft");
+          	sendVirtualKey("keydown", "ArrowRight")
+        } else if ((angle >= -Math.PI/6 || angle < Math.PI/6) ) {
+          	//右
+          	sendVirtualKey("keyup", "ArrowUp");
+          	sendVirtualKey("keyup", "ArrowDown");
+          	sendVirtualKey("keyup", "ArrowLeft");
+          	sendVirtualKey("keydown", "ArrowRight")
+        } else {
+          	//抬起
+          	sendVirtualKey("keyup", "ArrowUp");
+          	sendVirtualKey("keyup", "ArrowDown");
+          	sendVirtualKey("keyup", "ArrowLeft");
+          	sendVirtualKey("keyup", "ArrowRight")
+        }
+    }
+
+    // 处理移动事件
+    const handleMove = (event) => {
+        if (isMoving) {
+            let clientX, clientY;
+            if (event.touches) {
+                // 确保只使用活动的触摸点
+                const touch = Array.from(event.touches).find(t => t.identifier === activeTouchId);
+                if (touch) {
+                    clientX = touch.clientX; // 触摸点
+                    clientY = touch.clientY;
+                    calculateAngle(dpadDiv, clientX, clientY);
+                }
+            } else {
+                clientX = event.clientX; // 鼠标位置
+                clientY = event.clientY;
+                calculateAngle(dpadDiv, clientX, clientY);
+            }
+        }
+    };
+
 
     const createTemporaryButton = (x, y) => {
         const tempButton = document.createElement('div');
@@ -239,6 +341,7 @@ const virtualButtonManager = (() => {
 
         
         if (key == "dpad") {
+            dpadDiv = button;
             button.className = 'dpad_main';
             button.innerHTML = `
         				<div class="dpad_cross">
@@ -283,14 +386,16 @@ const virtualButtonManager = (() => {
         });
 
         if (key == "dpad") {
-            button.addEventListener('click', (event) => {
+            // 鼠标事件
+            button.addEventListener('mousedown', (event) => {
                 event.stopPropagation(); // 阻止事件冒泡
                 if (!editMode) {
-                    // 模拟按键事件
-                    console.log(`模拟按键: ${key}`);
-                    sendVirtualKey("keydown",key);
+                    isMoving = true; // 开始移动
+                    calculateAngle(dpadDiv, event.clientX, event.clientY);
+                    document.addEventListener('mousemove', handleMove); // 监听移动
                 }
             });
+            
             
             // 添加触摸事件
             button.addEventListener('touchstart', (event) => {
@@ -308,16 +413,38 @@ const virtualButtonManager = (() => {
                         buttons = buttons.filter(b => b.element !== button);
                     }, 3000); // 3000毫秒 = 3秒
                 } else {
-                    console.log(`模拟触屏: ${key}`);
-                    sendVirtualKey("keydown",key);
+                    isMoving = true; // 开始移动
+                    const touch = event.touches[0]; // 获取第一个触摸点
+                    activeTouchId = touch.identifier; // 记录活动的触摸点
+                    calculateAngle(dpadDiv, touch.clientX, touch.clientY);
+                    document.addEventListener('touchmove', handleMove); // 监听移动
                 }
             });
-        
+            
+            // 监听触摸结束事件
             button.addEventListener('touchend', () => {
                 if (editMode) {
                     clearTimeout(longPressTimer);
                 } else {
-                    sendVirtualKey("keyup",key);
+                    isMoving = false; // 停止移动
+                    activeTouchId = null; // 重置活动触摸点
+                    document.removeEventListener('touchmove', handleMove); // 移除移动监听
+                    
+                    //抬起所有方向键
+                    dpadDirection();
+                }
+            });
+        
+            // 监听鼠标释放事件
+            document.addEventListener('mouseup', () => {
+                if (editMode) {
+                    clearTimeout(longPressTimer);
+                } else {
+                    isMoving = false; // 停止移动
+                    document.removeEventListener('mousemove', handleMove); // 移除移动监听
+                    
+                    //抬起所有方向键
+                    dpadDirection();
                 }
             });
         } else {
@@ -450,7 +577,6 @@ const virtualButtonManager = (() => {
         exportButtons,
         importButtons,
         clearButtons,
-        createButton,
-        buttons
+        loadButtons
     };
 })();
