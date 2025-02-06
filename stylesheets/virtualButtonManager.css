@@ -1,3 +1,7 @@
+body {
+    user-select: none; /* 禁止文本选择 */
+}
+
 .virtualButton {
     position: absolute;
     width: 50px; /* 设置按钮的宽度 */
@@ -19,6 +23,14 @@
 .virtualButton:active {
     background-color: rgba(200, 200, 200, 0.8); /* 按下时稍微加深颜色 */
 }
+
+.editor {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    z-index: 1000;
+}
+
 .message {
     position: fixed;
     top: 10px;
@@ -33,7 +45,7 @@
 }
 
 .dpad_main {
-    position: absolute;
+		position: absolute;
     z-index: 999;
 }
 

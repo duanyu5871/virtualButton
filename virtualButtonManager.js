@@ -24,6 +24,20 @@ const virtualButtonManager = (() => {
     completeButton.style.cursor = 'pointer'; // 鼠标悬停时显示为指针
     completeButton.style.display = 'none'; // 初始隐藏
     completeButton.style.zIndex = 999;
+    
+    // 创建清空按钮
+    let clearButton = document.createElement('div');
+    clearButton.textContent = '清空'; // 按钮文本
+    clearButton.className = 'clearButton'; // 添加样式类
+    clearButton.style.position = 'fixed';
+    clearButton.style.top = '10px';
+    clearButton.style.right = '80px'; // 调整位置，使其在完成按钮左侧
+    clearButton.style.padding = '10px';
+    clearButton.style.backgroundColor = '#4CAF50'; // 按钮背景颜色
+    clearButton.style.color = 'white'; // 按钮文本颜色
+    clearButton.style.cursor = 'pointer'; // 鼠标悬停时显示为指针
+    clearButton.style.display = 'none'; // 初始隐藏
+    clearButton.style.zIndex = 999;
 
     // 文件上传控件
     let inputButtonsDiv = document.createElement('input');
@@ -36,6 +50,14 @@ const virtualButtonManager = (() => {
     let dpadDiv = null;
     
     const init = (parentID = false) => {
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = '/stylesheets/virtualButtonManager.css';
+
+        // 将 link 元素添加到 head 中
+        document.head.appendChild(link);
+      
         // 选择父框
         if (parentID) {
             parentDiv = document.getElementById(parentID)
@@ -43,10 +65,10 @@ const virtualButtonManager = (() => {
             parentDiv = document.body
         }
       
-      
         parentDiv.appendChild(messageDiv);
         parentDiv.appendChild(inputButtonsDiv);
         parentDiv.appendChild(completeButton); // 添加完成按钮到文档
+        parentDiv.appendChild(clearButton);
         
         // 文件上传监听事件
         inputButtonsDiv.addEventListener('change', handleFileImport);
@@ -55,10 +77,10 @@ const virtualButtonManager = (() => {
         document.body.addEventListener('click', handleBodyClick);
 
         // 完成按钮点击事件
-        completeButton.addEventListener('click', () => {
-            toggleRunMode(); // 切换到运行模式
-            completeButton.style.display = 'none'; // 隐藏完成按钮
-        });
+        completeButton.addEventListener('click', toggleRunMode); 
+        
+        // 清空按钮点击事件
+        clearButton.addEventListener('click', clearButtons);
 
         if (typeof(sendVirtualKey) == "undefined") {
             window.sendVirtualKey = function(keyState, keyName) {
@@ -71,12 +93,15 @@ const virtualButtonManager = (() => {
         editMode = true;
         showMessage('编辑模式已开启，点击位置生成按钮。');
         completeButton.style.display = 'block'; // 显示完成按钮
+        clearButton.style.display = 'block'; // 显示完成按钮
         keyToCreate = ''; // 重置按键
         pendingClick = null; // 重置待处理点击位置
     };
 
     const toggleRunMode = () => {
         editMode = false; // 关闭编辑模式
+        completeButton.style.display = 'none'; // 隐藏完成按钮
+        clearButton.style.display = 'none'; // 初始隐藏
         updateButtonPosition()
         showMessage('运行模式已开启，按钮将触发事件。');
     };
@@ -224,55 +249,64 @@ const virtualButtonManager = (() => {
           	sendVirtualKey("keydown", "ArrowUp");
           	sendVirtualKey("keyup", "ArrowDown");
           	sendVirtualKey("keyup", "ArrowLeft");
-          	sendVirtualKey("keydown", "ArrowRight")
+          	sendVirtualKey("keydown", "ArrowRight");
+          	document.querySelector(".dpad_main").className = "dpad_up_pressed dpad_right_pressed dpad_main";
         } else if (angle >= -Math.PI/3*2 && angle < -Math.PI/3 ) {
           	//上
           	sendVirtualKey("keydown", "ArrowUp");
           	sendVirtualKey("keyup", "ArrowDown");
           	sendVirtualKey("keyup", "ArrowLeft");
-          	sendVirtualKey("keyup", "ArrowRight")
+          	sendVirtualKey("keyup", "ArrowRight");
+          	document.querySelector(".dpad_main").className = "dpad_up_pressed dpad_main";
         } else if (angle >= -Math.PI/6*5 && angle < -Math.PI/3*2 ) {
           	//左上
           	sendVirtualKey("keydown", "ArrowUp");
           	sendVirtualKey("keyup", "ArrowDown");
           	sendVirtualKey("keydown", "ArrowLeft");
-          	sendVirtualKey("keyup", "ArrowRight")
+          	sendVirtualKey("keyup", "ArrowRight");
+          	document.querySelector(".dpad_main").className = "dpad_up_pressed dpad_left_pressed dpad_main";
         } else if (angle >= Math.PI/6*5 || angle < -Math.PI/6*5 ) {
           	//左
           	sendVirtualKey("keyup", "ArrowUp");
           	sendVirtualKey("keyup", "ArrowDown");
           	sendVirtualKey("keydown", "ArrowLeft");
-          	sendVirtualKey("keyup", "ArrowRight")
+          	sendVirtualKey("keyup", "ArrowRight");
+          	document.querySelector(".dpad_main").className = "dpad_left_pressed dpad_main";
         } else if (angle >= Math.PI/6*4 && angle < Math.PI/6*5 ) {
           	//左下
           	sendVirtualKey("keyup", "ArrowUp");
           	sendVirtualKey("keydown", "ArrowDown");
           	sendVirtualKey("keydown", "ArrowLeft");
-          	sendVirtualKey("keyup", "ArrowRight")
+          	sendVirtualKey("keyup", "ArrowRight");
+          	document.querySelector(".dpad_main").className = "dpad_down_pressed dpad_left_pressed dpad_main";
         } else if (angle >= Math.PI/6*2 && angle < Math.PI/6*4 ) {
           	//下
           	sendVirtualKey("keyup", "ArrowUp");
           	sendVirtualKey("keydown", "ArrowDown");
           	sendVirtualKey("keyup", "ArrowLeft");
-          	sendVirtualKey("keyup", "ArrowRight")
+          	sendVirtualKey("keyup", "ArrowRight");
+          	document.querySelector(".dpad_main").className = "dpad_down_pressed dpad_main";
         } else if (angle >= Math.PI/6 && angle < Math.PI/6*2 ) {
           	//右下
           	sendVirtualKey("keyup", "ArrowUp");
           	sendVirtualKey("keydown", "ArrowDown");
           	sendVirtualKey("keyup", "ArrowLeft");
-          	sendVirtualKey("keydown", "ArrowRight")
+          	sendVirtualKey("keydown", "ArrowRight");
+          	document.querySelector(".dpad_main").className = "dpad_down_pressed dpad_right_pressed dpad_main";
         } else if ((angle >= -Math.PI/6 || angle < Math.PI/6) ) {
           	//右
           	sendVirtualKey("keyup", "ArrowUp");
           	sendVirtualKey("keyup", "ArrowDown");
           	sendVirtualKey("keyup", "ArrowLeft");
-          	sendVirtualKey("keydown", "ArrowRight")
+          	sendVirtualKey("keydown", "ArrowRight");
+          	document.querySelector(".dpad_main").className = "dpad_right_pressed dpad_main";
         } else {
           	//抬起
           	sendVirtualKey("keyup", "ArrowUp");
           	sendVirtualKey("keyup", "ArrowDown");
           	sendVirtualKey("keyup", "ArrowLeft");
-          	sendVirtualKey("keyup", "ArrowRight")
+          	sendVirtualKey("keyup", "ArrowRight");
+          	document.querySelector(".dpad_main").className = "dpad_main";
         }
     }
 
@@ -574,9 +608,9 @@ const virtualButtonManager = (() => {
         toggleRunMode,
         generateButtons,
         generateArrowButtons,
+        loadButtons,
         exportButtons,
         importButtons,
-        clearButtons,
-        loadButtons
+        clearButtons
     };
 })();
