@@ -98,18 +98,6 @@ const virtualButtonManager = (() => {
         clearButton.style.display = 'block'; // 显示完成按钮
         keyToCreate = ''; // 重置按键
         pendingClick = null; // 重置待处理点击位置
-
-
-        // 创建覆盖全屏的半透明div
-        overlayDiv = document.createElement('div');
-        overlayDiv.style.position = 'fixed';
-        overlayDiv.style.left = '0';
-        overlayDiv.style.top = '0';
-        overlayDiv.style.width = '100%';
-        overlayDiv.style.height = '100%';
-        overlayDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // 半透明黑色
-        overlayDiv.style.zIndex = '998'; // 确保在按钮下方
-        parentDiv.appendChild(overlayDiv);
     };
 
     const toggleRunMode = () => {
@@ -119,11 +107,6 @@ const virtualButtonManager = (() => {
         updateButtonPosition();
         showMessage('运行模式已开启，按钮将触发事件。');
 
-        // 销毁覆盖全屏的div
-        if (overlayDiv) {
-            parentDiv.removeChild(overlayDiv);
-            overlayDiv = null; // 清空引用
-        }
     };
 
     const exportButtons = () => {
