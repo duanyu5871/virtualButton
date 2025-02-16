@@ -55,7 +55,7 @@ const virtualButtonManager = (() => {
         var link = document.createElement('link');
         link.rel = 'stylesheet';
         link.type = 'text/css';
-        link.href = 'virtualButtonManager.css';
+        link.href = './stylesheets/virtualButtonManager.css';
 
         // 将 link 元素添加到 head 中
         document.head.appendChild(link);
