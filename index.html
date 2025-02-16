@@ -26,7 +26,7 @@
     <button id="editBtn">编辑(edit mode)</button>
     <button id="runBtn">运行(run mode)</button>
     <button id="generateBtn">一键生成(generate)</button>
-    <button id="loadBtn" onclick="virtualButtonManager.loadButtons(settings)">加载设置(load settings)</button>
+    <button id="loadBtn">加载设置(load settings)</button>
     <button id="exportBtn">导出(export)</button>
     <button id="importBtn">导入(import)</button>
     <button id="clearBtn">导入(clear all)</button>
@@ -37,6 +37,7 @@
 <script>
     // Initialize the ButtonManager module
     virtualButtonManager.init("faker");
+    document.getElementById('loadBtn').addEventListener('click', ()=>{virtualButtonManager.loadButtons(settings);});
     document.getElementById('editBtn').addEventListener('click', virtualButtonManager.toggleEditMode);
     document.getElementById('runBtn').addEventListener('click', virtualButtonManager.toggleRunMode);
     document.getElementById('generateBtn').addEventListener('click', virtualButtonManager.generateButtons);
