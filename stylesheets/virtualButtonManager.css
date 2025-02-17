@@ -18,6 +18,7 @@ body {
     -webkit-tap-highlight-color: transparent; /* 禁用高亮效果 */
     user-select: none; /* 禁用文本选择 */
     transition: background-color 0.2s ease; /* 添加过渡效果 */
+    z-index: 999;
 }
 
 .virtualButton:active {
