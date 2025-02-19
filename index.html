@@ -102,11 +102,6 @@
         // 监听全屏状态变化
         function onFullScreenChange() {
             if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
-
-                window.game.width = window.gameSize[0]
-                window.game.height = window.gameSize[1]
-                window.gl.viewport(0, 0, window.gameSize[0], window.gameSize[1])
-
                 console.log('退出了全屏模式');
             } else {
                 console.log('进入了全屏模式');
@@ -137,16 +132,10 @@
         document.getElementById('importBtn').addEventListener('click', virtualButtonManager.importButtons);
         document.getElementById('fullScreenBtn').addEventListener('click', () => {
             fullsc(0)
-            window.game.width = screen.width
-            window.game.height = screen.width / window.gameSize[2]
-            window.gl.viewport(0, 0, game.width, game.height)
         });
 
         document.getElementById('fullScreenLandBtn').addEventListener('click', () => {
             fullsc(1)
-            window.game.width = screen.width
-            window.game.height = screen.width / window.gameSize[2]
-            window.gl.viewport(0, 0, game.width, game.height)
         });
 
         settings = [
