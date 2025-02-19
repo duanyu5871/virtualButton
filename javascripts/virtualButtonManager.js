@@ -55,9 +55,6 @@ const virtualButtonManager = (() => {
         link.rel = 'stylesheet';
         link.type = 'text/css';
         link.href = './stylesheets/virtualButtonManager.css';
-
-        // 将 link 元素添加到 head 中
-        document.head.appendChild(link);
       
         // 选择父框
         if (parentID) {
@@ -66,6 +63,7 @@ const virtualButtonManager = (() => {
             parentDiv = document.body
         }
       
+        parentDiv.appendChild(link);
         parentDiv.appendChild(messageDiv);
         parentDiv.appendChild(inputButtonsDiv);
         parentDiv.appendChild(completeButton); // 添加完成按钮到文档

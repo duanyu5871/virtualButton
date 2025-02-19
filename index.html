@@ -114,7 +114,7 @@
         document.getElementById('fullScreenLandBtn').addEventListener('click', () => {
             fullsc(1)
             window.game.width = screen.height
-            window.game.height = game.width/window.gameSize[2]
+            window.game.height = screen.height/window.gameSize[2]
             window.gl.viewport(0, 0, game.width, game.height)
         });
 
@@ -130,7 +130,7 @@
 
             window.wrap = iframeDocument.getElementsByClassName("emscripten_border")[0]
             window.game = iframeDocument.getElementById('canvas');
-            window.gameSize = [window.game.width,window.game.height,window.game.width/window.game.height]
+            window.gameSize = [1366,768,1366/768]
             window.gl = game.getContext("webgl")
             virtualButtonManager.init(wrap);
         };   
