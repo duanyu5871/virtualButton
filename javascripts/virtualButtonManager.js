@@ -5,7 +5,7 @@ const virtualButtonManager = (() => {
     let buttons = []; // 存放所有的按键
     let keyToCreate = null; // 用于存储按下的键
     let pendingClick = null; // 用于存储待处理的点击位置
-    let overlayDiv = null; // 用于存储覆盖全屏的div
+
     
     // 提示信息的框
     let messageDiv = document.createElement('div');
@@ -49,6 +49,8 @@ const virtualButtonManager = (() => {
     // 拟储存所有按钮的父框
     let parentDiv = null;
     let dpadDiv = null;
+    let overlayDiv = null; // 用于存储覆盖全屏的div
+    let parentDocument = null
     
     const init = (parentID = false) => {
         var link = document.createElement('link');
@@ -59,9 +61,10 @@ const virtualButtonManager = (() => {
         // 选择父框
         if (parentID) {
             parentDiv = parentID
-            document = parentID.ownerDocument
+            parentDocument = parentID.ownerDocument
         } else {
             parentDiv = document.body
+            parentDocument = document
         }
       
         parentDiv.appendChild(link);
@@ -74,7 +77,7 @@ const virtualButtonManager = (() => {
         inputButtonsDiv.addEventListener('change', handleFileImport);
         
         // 屏幕点击监听事件
-        document.body.addEventListener('click', handleBodyClick);
+        parentDocument.body.addEventListener('click', handleBodyClick);
 
         // 完成按钮点击事件
         completeButton.addEventListener('click', toggleRunMode); 
@@ -98,7 +101,7 @@ const virtualButtonManager = (() => {
         pendingClick = null; // 重置待处理点击位置
         
         // 创建覆盖全屏的半透明div
-        overlayDiv = document.createElement('div');
+        overlayDiv = parentDocument.createElement('div');
         overlayDiv.style.position = 'fixed';
         overlayDiv.style.left = '0';
         overlayDiv.style.top = '0';
@@ -132,7 +135,7 @@ const virtualButtonManager = (() => {
         })));
         const blob = new Blob([json], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
+        const a = parentDocument.createElement('a');
         a.href = url;
         a.download = 'buttons.json';
         a.click();
@@ -354,7 +357,7 @@ const virtualButtonManager = (() => {
 
 
     const createTemporaryButton = (x, y) => {
-        const tempButton = document.createElement('div');
+        const tempButton = parentDocument.createElement('div');
         tempButton.className = 'virtualButton';
         tempButton.style.left = `${x - 25}px`; // 位置调整
         tempButton.style.top = `${y - 25}px`;  // 位置调整
@@ -386,7 +389,7 @@ const virtualButtonManager = (() => {
     }
 
     const createButton = (x, y, key, size = 50) => {
-        const button = document.createElement('div');
+        const button = parentDocument.createElement('div');
         
         // 将按钮位置设置为点击位置的中心
         button.style.left = `${x - size / 2}px`; // 根据大小调整位置
@@ -430,8 +433,8 @@ const virtualButtonManager = (() => {
                     offsetY = event.clientY - button.getBoundingClientRect().top;
     
                     // 开始拖动
-                    document.addEventListener('mousemove', onMouseMove);
-                    document.addEventListener('mouseup', onMouseUp);
+                    parentDocument.addEventListener('mousemove', onMouseMove);
+                    parentDocument.addEventListener('mouseup', onMouseUp);
                 
                     longPressTimer = setTimeout(() => {
                         // 长按3秒钟后删除按钮
@@ -446,12 +449,12 @@ const virtualButtonManager = (() => {
             });
             
             // 监听鼠标释放事件
-            document.addEventListener('mouseup', () => {
+            parentDocument.addEventListener('mouseup', () => {
                 if (editMode) {
                     clearTimeout(longPressTimer);
                 } else {
                     isMoving = false; // 停止移动
-                    document.removeEventListener('mousemove', handleMove); // 移除移动监听
+                    parentDocument.removeEventListener('mousemove', handleMove); // 移除移动监听
                     
                     //抬起所有方向键
                     dpadDirection();
@@ -465,8 +468,8 @@ const virtualButtonManager = (() => {
                     offsetX = touch.clientX - button.getBoundingClientRect().left;
                     offsetY = touch.clientY - button.getBoundingClientRect().top;
         
-                    document.addEventListener('touchmove', onTouchMove);
-                    document.addEventListener('touchend', onTouchEnd);
+                    parentDocument.addEventListener('touchmove', onTouchMove);
+                    parentDocument.addEventListener('touchend', onTouchEnd);
                     
                     longPressTimer = setTimeout(() => {
                         // 长按3秒钟后删除按钮
@@ -489,7 +492,7 @@ const virtualButtonManager = (() => {
                 } else {
                     isMoving = false; // 停止移动
                     activeTouchId = null; // 重置活动触摸点
-                    document.removeEventListener('touchmove', handleMove); // 移除移动监听
+                    parentDocument.removeEventListener('touchmove', handleMove); // 移除移动监听
                     
                     //抬起所有方向键
                     dpadDirection();
@@ -502,8 +505,8 @@ const virtualButtonManager = (() => {
                     offsetY = event.clientY - button.getBoundingClientRect().top;
     
                     // 开始拖动
-                    document.addEventListener('mousemove', onMouseMove);
-                    document.addEventListener('mouseup', onMouseUp);
+                    parentDocument.addEventListener('mousemove', onMouseMove);
+                    parentDocument.addEventListener('mouseup', onMouseUp);
                 
                     longPressTimer = setTimeout(() => {
                         // 长按3秒钟后删除按钮
@@ -530,8 +533,8 @@ const virtualButtonManager = (() => {
                     offsetX = touch.clientX - button.getBoundingClientRect().left;
                     offsetY = touch.clientY - button.getBoundingClientRect().top;
         
-                    document.addEventListener('touchmove', onTouchMove);
-                    document.addEventListener('touchend', onTouchEnd);
+                    parentDocument.addEventListener('touchmove', onTouchMove);
+                    parentDocument.addEventListener('touchend', onTouchEnd);
                     
                     longPressTimer = setTimeout(() => {
                         // 长按3秒钟后删除按钮
@@ -563,8 +566,8 @@ const virtualButtonManager = (() => {
         }
         
         function onMouseUp() {
-            document.removeEventListener('mousemove', onMouseMove);
-            document.removeEventListener('mouseup', onMouseUp);
+            parentDocument.removeEventListener('mousemove', onMouseMove);
+            parentDocument.removeEventListener('mouseup', onMouseUp);
             clearTimeout(longPressTimer); // 取消长按计时器
         }
     
@@ -581,8 +584,8 @@ const virtualButtonManager = (() => {
         }
     
         function onTouchEnd() {
-            document.removeEventListener('touchmove', onTouchMove);
-            document.removeEventListener('touchend', onTouchEnd);
+            parentDocument.removeEventListener('touchmove', onTouchMove);
+            parentDocument.removeEventListener('touchend', onTouchEnd);
             clearTimeout(longPressTimer); // 取消长按计时器
         }
 
