@@ -21,6 +21,32 @@
             left: 10px;
             z-index: 1000;
         }
+
+        #gameFrame {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            margin: 0;
+            padding-top: 0px;
+            padding-bottom: 0px;
+        }
+
+        @media screen and (max-width: 800px) {
+            #gameFrame {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 70%;
+                border: none;
+                margin: 0;
+                padding-top: 0px;
+                padding-bottom: 0px;
+            }
+        }
     </style>
 </head>
 
@@ -81,7 +107,7 @@
         document.getElementById('fullScreenBtn').addEventListener('click', () => {
             fullsc(0)
             window.game.width = window.innerWidth
-            window.game.height = window.innerWidth*window.gameSize[2]
+            window.game.height = window.innerWidth/window.gameSize[2]
             window.gl.viewport(0, 0, game.width, game.height)
         });
 
