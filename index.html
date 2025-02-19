@@ -106,14 +106,14 @@
         document.getElementById('importBtn').addEventListener('click', virtualButtonManager.importButtons);
         document.getElementById('fullScreenBtn').addEventListener('click', () => {
             fullsc(0)
-            window.game.width = screen.width
+            window.game.width = min(screen.height,window.gameSize[0])
             window.game.height = screen.width/window.gameSize[2]
             window.gl.viewport(0, 0, game.width, game.height)
         });
 
         document.getElementById('fullScreenLandBtn').addEventListener('click', () => {
             fullsc(1)
-            window.game.width = screen.height
+            window.game.width = min(screen.height,window.gameSize[0])
             window.game.height = screen.height/window.gameSize[2]
             window.gl.viewport(0, 0, game.width, game.height)
         });
