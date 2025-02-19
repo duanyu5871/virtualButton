@@ -59,6 +59,7 @@ const virtualButtonManager = (() => {
         // 选择父框
         if (parentID) {
             parentDiv = parentID
+            document = parentID.ownerDocument
         } else {
             parentDiv = document.body
         }
@@ -271,63 +272,63 @@ const virtualButtonManager = (() => {
           	sendVirtualKey("keyup", "ArrowDown");
           	sendVirtualKey("keyup", "ArrowLeft");
           	sendVirtualKey("keydown", "ArrowRight");
-          	document.querySelector(".dpad_main").className = "dpad_up_pressed dpad_right_pressed dpad_main";
+          	dpadDiv.className = "dpad_up_pressed dpad_right_pressed dpad_main";
         } else if (angle >= -Math.PI/3*2 && angle < -Math.PI/3 ) {
           	//上
           	sendVirtualKey("keydown", "ArrowUp");
           	sendVirtualKey("keyup", "ArrowDown");
           	sendVirtualKey("keyup", "ArrowLeft");
           	sendVirtualKey("keyup", "ArrowRight");
-          	document.querySelector(".dpad_main").className = "dpad_up_pressed dpad_main";
+          	dpadDiv.className = "dpad_up_pressed dpad_main";
         } else if (angle >= -Math.PI/6*5 && angle < -Math.PI/3*2 ) {
           	//左上
           	sendVirtualKey("keydown", "ArrowUp");
           	sendVirtualKey("keyup", "ArrowDown");
           	sendVirtualKey("keydown", "ArrowLeft");
           	sendVirtualKey("keyup", "ArrowRight");
-          	document.querySelector(".dpad_main").className = "dpad_up_pressed dpad_left_pressed dpad_main";
+          	dpadDiv.className = "dpad_up_pressed dpad_left_pressed dpad_main";
         } else if (angle >= Math.PI/6*5 || angle < -Math.PI/6*5 ) {
           	//左
           	sendVirtualKey("keyup", "ArrowUp");
           	sendVirtualKey("keyup", "ArrowDown");
           	sendVirtualKey("keydown", "ArrowLeft");
           	sendVirtualKey("keyup", "ArrowRight");
-          	document.querySelector(".dpad_main").className = "dpad_left_pressed dpad_main";
+          	dpadDiv.className = "dpad_left_pressed dpad_main";
         } else if (angle >= Math.PI/6*4 && angle < Math.PI/6*5 ) {
           	//左下
           	sendVirtualKey("keyup", "ArrowUp");
           	sendVirtualKey("keydown", "ArrowDown");
           	sendVirtualKey("keydown", "ArrowLeft");
           	sendVirtualKey("keyup", "ArrowRight");
-          	document.querySelector(".dpad_main").className = "dpad_down_pressed dpad_left_pressed dpad_main";
+          	dpadDiv.className = "dpad_down_pressed dpad_left_pressed dpad_main";
         } else if (angle >= Math.PI/6*2 && angle < Math.PI/6*4 ) {
           	//下
           	sendVirtualKey("keyup", "ArrowUp");
           	sendVirtualKey("keydown", "ArrowDown");
           	sendVirtualKey("keyup", "ArrowLeft");
           	sendVirtualKey("keyup", "ArrowRight");
-          	document.querySelector(".dpad_main").className = "dpad_down_pressed dpad_main";
+          	dpadDiv.className = "dpad_down_pressed dpad_main";
         } else if (angle >= Math.PI/6 && angle < Math.PI/6*2 ) {
           	//右下
           	sendVirtualKey("keyup", "ArrowUp");
           	sendVirtualKey("keydown", "ArrowDown");
           	sendVirtualKey("keyup", "ArrowLeft");
           	sendVirtualKey("keydown", "ArrowRight");
-          	document.querySelector(".dpad_main").className = "dpad_down_pressed dpad_right_pressed dpad_main";
+          	dpadDiv.className = "dpad_down_pressed dpad_right_pressed dpad_main";
         } else if ((angle >= -Math.PI/6 || angle < Math.PI/6) ) {
           	//右
           	sendVirtualKey("keyup", "ArrowUp");
           	sendVirtualKey("keyup", "ArrowDown");
           	sendVirtualKey("keyup", "ArrowLeft");
           	sendVirtualKey("keydown", "ArrowRight");
-          	document.querySelector(".dpad_main").className = "dpad_right_pressed dpad_main";
+          	dpadDiv.className = "dpad_right_pressed dpad_main";
         } else {
           	//抬起
           	sendVirtualKey("keyup", "ArrowUp");
           	sendVirtualKey("keyup", "ArrowDown");
           	sendVirtualKey("keyup", "ArrowLeft");
           	sendVirtualKey("keyup", "ArrowRight");
-          	document.querySelector(".dpad_main").className = "dpad_main";
+          	dpadDiv.className = "dpad_main";
         }
     }
 
