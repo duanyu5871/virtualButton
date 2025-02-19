@@ -59,7 +59,7 @@
         <button id="exportBtn">导出(export)</button>
         <button id="importBtn">导入(import)</button>
         <button id="fullScreenBtn">全屏(fullscreen)</button>
-        <button id="fullScreenLandBtn">横向全屏(fullscreen landscape)</button>
+        <button id="fullScreenLandBtn">横向全屏(手机用)(fullscreen landscape)</button>
     </div>
 
     <div>
@@ -99,6 +99,27 @@
             }
         }
 
+        // 监听全屏状态变化
+        function onFullScreenChange() {
+            if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+                if (isMobileDevice() == true) {
+                    window.game.width = window.gameSize[0]
+                    window.game.height = window.gameSize[1]
+                    window.gl.viewport(0, 0, game.width, game.height)
+                }
+                console.log('退出了全屏模式');
+            } else {
+                console.log('进入了全屏模式');
+            }
+        }
+
+        // 监听全屏变化事件
+        document.addEventListener('fullscreenchange', onFullScreenChange);
+        document.addEventListener('mozfullscreenchange', onFullScreenChange);
+        document.addEventListener('webkitfullscreenchange', onFullScreenChange);
+        document.addEventListener('MSFullscreenChange', onFullScreenChange);
+
+        // 监听按钮事件
         document.getElementById('loadBtn').addEventListener('click', () => { virtualButtonManager.loadButtons(settings); });
         document.getElementById('editBtn').addEventListener('click', virtualButtonManager.toggleEditMode);
         document.getElementById('generateBtn').addEventListener('click', virtualButtonManager.generateButtons);
@@ -106,15 +127,15 @@
         document.getElementById('importBtn').addEventListener('click', virtualButtonManager.importButtons);
         document.getElementById('fullScreenBtn').addEventListener('click', () => {
             fullsc(0)
-            window.game.width = min(screen.height,window.gameSize[0])
-            window.game.height = screen.width/window.gameSize[2]
+            window.game.width = screen.width
+            window.game.height = screen.width / window.gameSize[2]
             window.gl.viewport(0, 0, game.width, game.height)
         });
 
         document.getElementById('fullScreenLandBtn').addEventListener('click', () => {
             fullsc(1)
-            window.game.width = min(screen.height,window.gameSize[0])
-            window.game.height = screen.height/window.gameSize[2]
+            window.game.width = screen.width
+            window.game.height = screen.width / window.gameSize[2]
             window.gl.viewport(0, 0, game.width, game.height)
         });
 
@@ -130,7 +151,7 @@
 
             window.wrap = iframeDocument.getElementsByClassName("emscripten_border")[0]
             window.game = iframeDocument.getElementById('canvas');
-            window.gameSize = [1366,768,1366/768]
+            window.gameSize = [1366, 768, 1366 / 768]
             window.gl = game.getContext("webgl")
             virtualButtonManager.init(wrap);
         };   
