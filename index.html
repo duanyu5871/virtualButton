@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,8 +11,10 @@
             position: relative;
             height: 100vh;
             overflow: hidden;
-            user-select: none; /* 禁止文本选择 */
+            user-select: none;
+            /* 禁止文本选择 */
         }
+
         .editor {
             position: fixed;
             bottom: 10px;
@@ -20,42 +23,93 @@
         }
     </style>
 </head>
+
 <body>
 
-<div class="editor">
-    <button id="editBtn">编辑(edit mode)</button>
-    <button id="runBtn">运行(run mode)</button>
-    <button id="generateBtn">一键生成(generate)</button>
-    <button id="loadBtn">加载设置(load settings)</button>
-    <button id="exportBtn">导出(export)</button>
-    <button id="importBtn">导入(import)</button>
-    <button id="clearBtn">导入(clear all)</button>
-</div>
+    <div class="editor">
+        <button id="loadBtn">加载按键(load settings)</button>
+        <button id="editBtn">编辑(edit mode)</button>
+        <button id="generateBtn">文本生成(generate)</button>
+        <button id="exportBtn">导出(export)</button>
+        <button id="importBtn">导入(import)</button>
+        <button id="fullScreenBtn">全屏(fullscreen)</button>
+        <button id="fullScreenLandBtn">横向全屏(fullscreen landscape)</button>
+    </div>
 
-<div id="faker"> </div>
+    <div>
+        <iframe src="./sdlMS_online/sdlMS.html" id="gameFrame"> 123 </iframe>
+    </div>
 
-<script>
-    // Initialize the ButtonManager module
-    virtualButtonManager.init("faker");
-    document.getElementById('loadBtn').addEventListener('click', ()=>{virtualButtonManager.loadButtons(settings);});
-    document.getElementById('editBtn').addEventListener('click', virtualButtonManager.toggleEditMode);
-    document.getElementById('runBtn').addEventListener('click', virtualButtonManager.toggleRunMode);
-    document.getElementById('generateBtn').addEventListener('click', virtualButtonManager.generateButtons);
-    document.getElementById('exportBtn').addEventListener('click', virtualButtonManager.exportButtons);
-    document.getElementById('importBtn').addEventListener('click', virtualButtonManager.importButtons);
-    document.getElementById('clearBtn').addEventListener('click', virtualButtonManager.clearButtons);
+    <script>
+        function fullsc(flag = 0) {
+            var docElm = window.warp;
+            try {
+                docElm.requestFullscreen();
+            } catch { console.log("full_mode1 error") }
 
-    settings = [
-        {"key":"KeyD","left":"100px","top":"100px","size":"50px"},
-        {"key":"KeyA","left":"800px","top":"800px","size":"100px"}
-    ]
+            try {
+                docElm.mozRequestFullScreen();
+            } catch { console.log("full_mode2 error") }
 
-    virtualButtonManager.loadButtons([
-        {"key":"KeyF","left":"800px","top":"800px","size":"100px"},
-        {"key":"dpad","left":"200px","top":"200px","size":"120px"},
-        {"key":"KeyA","left":"200px","top":"300px","size":"50px"}
-    ])
-</script>
+            try {
+                docElm.webkitRequestFullscreen();
+            } catch { console.log("full_mode3 error") }
+
+            try {
+                docElm.webkitEnterFullScreen();
+            } catch { console.log("full_mode4 error") }
+            if (flag) {
+                lockScreenInLandscape()
+            };
+        }
+
+        function lockScreenInLandscape() {
+            if (!('orientation' in screen)) {
+                return;
+            }
+
+            if (matchMedia('(orientation: portrait) and (max-device-width: 768px)').matches) {
+                screen.orientation.lock('landscape');
+            }
+        }
+
+        document.getElementById('loadBtn').addEventListener('click', () => { virtualButtonManager.loadButtons(settings); });
+        document.getElementById('editBtn').addEventListener('click', virtualButtonManager.toggleEditMode);
+        document.getElementById('generateBtn').addEventListener('click', virtualButtonManager.generateButtons);
+        document.getElementById('exportBtn').addEventListener('click', virtualButtonManager.exportButtons);
+        document.getElementById('importBtn').addEventListener('click', virtualButtonManager.importButtons);
+        document.getElementById('fullScreenBtn').addEventListener('click', () => {
+            fullsc(0)
+            window.game.width = window.innerWidth
+            window.game.height = window.innerWidth*window.gameSize[2]
+            window.gl.viewport(0, 0, game.width, game.height)
+        });
+
+        document.getElementById('fullScreenLandBtn').addEventListener('click', () => {
+            fullsc(1)
+            window.game.width = window.innerWidth
+            window.game.height = window.innerHeight
+            window.gl.viewport(0, 0, game.width, game.height)
+        });
+
+        settings = [
+            { "key": "KeyD", "left": "100px", "top": "100px", "size": "50px" },
+            { "key": "KeyA", "left": "800px", "top": "800px", "size": "100px" }
+        ]
+
+        const iframe = document.getElementById('gameFrame');
+        iframe.onload = function () {
+            console.log('iframe加载完成');
+            const iframeDocument = iframe.contentDocument;
+
+            window.warp = iframeDocument.getElementsByClassName("emscripten_border")[0]
+            window.game = iframeDocument.getElementById('canvas');
+            window.gameSize = [window.game.width,window.game.height,window.game.width/window.game.height]
+            window.gl = game.getContext("webgl")
+            virtualButtonManager.init(wrap);
+        };   
+    </script>
 
 </body>
+
 </html>

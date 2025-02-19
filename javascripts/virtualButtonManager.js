@@ -61,7 +61,7 @@ const virtualButtonManager = (() => {
       
         // 选择父框
         if (parentID) {
-            parentDiv = document.getElementById(parentID)
+            parentDiv = parentID
         } else {
             parentDiv = document.body
         }
