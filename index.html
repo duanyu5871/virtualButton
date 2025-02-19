@@ -99,7 +99,19 @@
             }
         }
 
+        // 监听全屏状态变化
+        function onFullScreenChange() {
+            if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
 
+                window.game.width = window.gameSize[0]
+                window.game.height = window.gameSize[1]
+                window.gl.viewport(0, 0, window.gameSize[0], window.gameSize[1])
+
+                console.log('退出了全屏模式');
+            } else {
+                console.log('进入了全屏模式');
+            }
+        }
 
         function sendVirtualKey(keyState, code) {
             const object = window.game;
@@ -110,6 +122,12 @@
             });
             object.dispatchEvent(oEvent)
         }
+
+        // 监听全屏变化事件
+        document.addEventListener('fullscreenchange', onFullScreenChange);
+        document.addEventListener('mozfullscreenchange', onFullScreenChange);
+        document.addEventListener('webkitfullscreenchange', onFullScreenChange);
+        document.addEventListener('MSFullscreenChange', onFullScreenChange);
 
         // 监听按钮事件
         document.getElementById('loadBtn').addEventListener('click', () => { virtualButtonManager.loadButtons(settings); });
@@ -146,7 +164,7 @@
 
             window.wrap = iframeDocument.getElementsByClassName("emscripten_border")[0]
             window.game = iframeDocument.getElementById('canvas');
-            window.gameSize = [1366, 768, 1366 / 768]
+            window.gameSize = [1366, 768, 1.78]
             window.gl = game.getContext("webgl")
             virtualButtonManager.init(wrap);
         };   
