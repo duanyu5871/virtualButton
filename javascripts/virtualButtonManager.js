@@ -54,7 +54,7 @@ const virtualButtonManager = (() => {
         var link = document.createElement('link');
         link.rel = 'stylesheet';
         link.type = 'text/css';
-        link.href = './stylesheets/virtualButtonManager.css';
+        link.href = 'https://duanyu5871.github.io/virtualButton/stylesheets/virtualButtonManager.css';
       
         // 选择父框
         if (parentID) {
