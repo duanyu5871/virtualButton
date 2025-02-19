@@ -68,7 +68,7 @@
 
     <script>
         function fullsc(flag = 0) {
-            var docElm = window.warp;
+            var docElm = window.wrap;
             try {
                 docElm.requestFullscreen();
             } catch { console.log("full_mode1 error") }
@@ -128,7 +128,7 @@
             console.log('iframe加载完成');
             const iframeDocument = iframe.contentDocument;
 
-            window.warp = iframeDocument.getElementsByClassName("emscripten_border")[0]
+            window.wrap = iframeDocument.getElementsByClassName("emscripten_border")[0]
             window.game = iframeDocument.getElementById('canvas');
             window.gameSize = [window.game.width,window.game.height,window.game.width/window.game.height]
             window.gl = game.getContext("webgl")
