@@ -102,15 +102,25 @@
         // 监听全屏状态变化
         function onFullScreenChange() {
             if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
-                if (isMobileDevice() == true) {
-                    window.game.width = window.gameSize[0]
-                    window.game.height = window.gameSize[1]
-                    window.gl.viewport(0, 0, game.width, game.height)
-                }
+
+                window.game.width = window.gameSize[0]
+                window.game.height = window.gameSize[1]
+                window.gl.viewport(0, 0, game.width, game.height)
+
                 console.log('退出了全屏模式');
             } else {
                 console.log('进入了全屏模式');
             }
+        }
+
+        function sendVirtualKey(keyState, code) {
+            const object = window.game;
+            var oEvent = new KeyboardEvent(keyState, {
+                bubbles: true,
+                key: code,
+                code: code
+            });
+            object.dispatchEvent(oEvent)
         }
 
         // 监听全屏变化事件
