@@ -1,0 +1,3 @@
+[submodule "sdlMS_online"]
+	path = sdlMS_online
+	url = https://github.com/PShocker/sdlMS_online
