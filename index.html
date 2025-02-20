@@ -72,6 +72,11 @@
             } catch { console.log("full_mode4 error") }
             if (flag) {
                 lockScreenInLandscape()
+                adjustCanvasSize(); // 全屏后调整尺寸
+                window.wrap.style.width = '100%'
+                window.wrap.style.height = '100%'
+                window.game.style.width = '100%'
+                window.game.style.height = '100%'
             };
         }
 
@@ -92,6 +97,14 @@
             } else {
                 console.log('进入了全屏模式');
             }
+        }
+
+        function adjustCanvasSize() {
+            // 根据父元素的实际尺寸设置Canvas的像素尺寸
+            window.game.width = window.wrap.clientWidth;
+            window.game.height = window.wrap.clientHeight;
+            // 若游戏有渲染缩放，需在此触发重绘或调整
+            console.log('Canvas尺寸调整为:', window.game.width, window.game.height);
         }
 
         function sendVirtualKey(keyState, code) {
@@ -125,6 +138,8 @@
             window.game.height = screen.width;
             fullsc(1);
         });
+
+        window.addEventListener('orientationchange', adjustCanvasSize);
 
         screenCross = [screen.width / 2, screen.height / 2];
 
