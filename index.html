@@ -121,12 +121,12 @@
         });
 
         document.getElementById('fullScreenLandBtn').addEventListener('click', () => {
+            window.game.width = screen.height;
+            window.game.height = screen.width;
             fullsc(1);
-            window.game.width = screen.width;
-            window.game.height = screen.height;
         });
 
-        screenCross = [screen.width/2,screen.height/2];
+        screenCross = [screen.width / 2, screen.height / 2];
 
         settings = [
             { "key": "dpad", "left": "80px", "top": screenCross[1] + 100 + "px", "size": "120px" },
