@@ -101,7 +101,7 @@
                 key: code,
                 code: code
             });
-            object.dispatchEvent(oEvent)
+            object.dispatchEvent(oEvent);
         }
 
         // 监听全屏变化事件
@@ -117,22 +117,23 @@
         document.getElementById('exportBtn').addEventListener('click', virtualButtonManager.exportButtons);
         document.getElementById('importBtn').addEventListener('click', virtualButtonManager.importButtons);
         document.getElementById('fullScreenBtn').addEventListener('click', () => {
-            fullsc(0)
+            fullsc(0);
         });
 
         document.getElementById('fullScreenLandBtn').addEventListener('click', () => {
+            fullsc(1);
             window.wrap.style.width = screen.width + 'px';
             window.wrap.style.height = screen.height + 'px';
-            fullsc(1)
+            window.gl.viewport(0,0,screen.height,screen.width);
         });
 
-        screenCross = [screen.width/2,screen.height/2]
+        screenCross = [screen.width/2,screen.height/2];
 
         settings = [
-            { "key": "dpad", "left": "100px", "top": screenCross[1] + 150 + "px", "size": "120px" },
-            { "key": "KeyA", "left": screenCross[0] + 150 + "px", "top": screenCross[1] + 100 + "px", "size": "50px" },
-            { "key": "ControlLeft", "left": screenCross[0] + 150 + "px", "top": screenCross[1] + 160 + "px", "size": "50px" },
-            { "key": "AltLeft", "left": screenCross[0] + 210 + "px", "top": screenCross[1] + 160 + "px", "size": "50px" }
+            { "key": "dpad", "left": "80px", "top": screenCross[1] + 100 + "px", "size": "120px" },
+            { "key": "KeyA", "left": screenCross[0] + 50 + "px", "top": screenCross[1] + 100 + "px", "size": "50px" },
+            { "key": "ControlLeft", "left": screenCross[0] + 50 + "px", "top": screenCross[1] + 160 + "px", "size": "50px" },
+            { "key": "AltLeft", "left": screenCross[0] + 110 + "px", "top": screenCross[1] + 160 + "px", "size": "50px" }
         ]
 
         const iframe = document.getElementById('gameFrame');
