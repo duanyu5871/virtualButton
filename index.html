@@ -122,8 +122,8 @@
 
         document.getElementById('fullScreenLandBtn').addEventListener('click', () => {
             fullsc(1);
-            window.game.width = screen.width;
-            window.game.height = screen.height;
+            window.game.width = screen.height;
+            window.game.height = screen.width;
         });
 
         screenCross = [screen.width/2,screen.height/2];
