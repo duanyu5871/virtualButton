@@ -122,9 +122,8 @@
 
         document.getElementById('fullScreenLandBtn').addEventListener('click', () => {
             fullsc(1);
-            window.wrap.style.width = screen.width + 'px';
-            window.wrap.style.height = screen.height + 'px';
-            window.gl.viewport(0,0,screen.height,screen.width);
+            window.game.width = screen.width;
+            window.game.height = screen.height;
         });
 
         screenCross = [screen.width/2,screen.height/2];
