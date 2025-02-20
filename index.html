@@ -121,15 +121,21 @@
         });
 
         document.getElementById('fullScreenLandBtn').addEventListener('click', () => {
+            window.wrap.width = screen.width;
+            window.wrao.height = screen.height;
             fullsc(1)
         });
 
-        settings = [
-            { "key": "dpad", "left": "100px", "top": "300px", "size": "120px" },
-            { "key": "KeyA", "left": "200px", "top": "300px", "size": "50px" },
-            { "key": "ControlLeft", "left": "200px", "top": "360px", "size": "50px" },
-            { "key": "AltLeft", "left": "260px", "top": "360px", "size": "50px" }
+        screenCross = [screen.width/2,screen.height/2]
 
+
+
+
+        settings = [
+            { "key": "dpad", "left": "100px", "top": screenCross[1] + 50 + "px", "size": "120px" },
+            { "key": "KeyA", "left": screenCross[0] + 50 + "px", "top": screenCross[1] + 50 + "px", "size": "50px" },
+            { "key": "ControlLeft", "left": screenCross[0] + 50 + "px", "top": screenCross[1] + 110 + "px", "size": "50px" },
+            { "key": "AltLeft", "left": screenCross[0] + 110 + "px", "top": screenCross[1] + 110 + "px", "size": "50px" }
         ]
 
         const iframe = document.getElementById('gameFrame');
